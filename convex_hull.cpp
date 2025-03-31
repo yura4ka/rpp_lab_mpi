@@ -137,10 +137,16 @@ int main(int argc, char** argv)
     if (rank == 0) {
         auto result = convex_hull(global_points);
         double time_end = MPI_Wtime();
-        std::cout << "Input size: " << points.size()
+        std::string file_name = "./output/output-" + std::to_string(size) + "-" + std::string(argv[1]);
+        std::ofstream out(file_name);
+        out << "Input size: " << points.size()
             << "\nNumber of processes: " << size
             << "\nTime: " << time_end - time_start
-            << "\nHull size: " << hull.size() << "\n";
+            << "\nHull size: " << result.size() << "\n";
+        for (auto& p : result)
+        {
+            out << p.x << " " << p.y << "\n";
+        }
     }
 
     MPI_Finalize();
